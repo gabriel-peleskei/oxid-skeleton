@@ -1,0 +1,7 @@
+services:
+
+  GP\Oxid\Skeleton\Command\Component:
+    tags:
+      - { name: console.command, command: 'gp:skeleton:component' }
+    autowire: true
+    public: true
