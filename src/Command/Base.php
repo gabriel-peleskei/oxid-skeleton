@@ -39,11 +39,11 @@ abstract class Base extends Command {
         }
     }
 
-    protected function ask(Question $question): mixed {
+    protected function ask(Question $question) {
         return $this->helper->ask($this->input, $this->output, $question);
     }
 
-    protected function question(string $option, string $question, string $example = ''): mixed {
+    protected function question(string $option, string $question, string $example = '') {
         $default = $this->input->getOption($option);
         if ($example) {
             $example = "<info>$example</info> ";
