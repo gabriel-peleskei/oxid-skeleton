@@ -7,25 +7,28 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\ConfirmationQuestion;
+use Symfony\Component\Console\Question\Question;
 
 class Module extends Base {
 
-    protected $vendor = '<vendor>/<name>';
-    protected $title = 'Module skeleton for oxid 6';
-    protected $description = '';
-    protected $license = 'MIT';
-    protected $version = '1.0.0';
-    protected $autoload = 'That\\Should\\Be\\Changed';
-    protected $target = 'src/';
-    protected $absTarget;
-    protected $path = "./gp-skeleton-module";
-    protected $id = 'gp_module_skeleton';
-    protected $readme = false;
-    protected $changelog = false;
+    protected string $template = 'twig';
+    protected string $vendor = '<vendor>/<name>';
+    protected string $title = 'Module skeleton for oxid 6';
+    protected string $description = '';
+    protected string $license = 'MIT';
+    protected string $version = '1.0.0';
+    protected string $autoload = 'That\\Should\\Be\\Changed';
+    protected string $target = 'src/';
+    protected string $absTarget;
+    protected string $path = "./gp-skeleton-module";
+    protected string $id = 'gp_module_skeleton';
+    protected bool $readme = false;
+    protected bool $changelog = false;
 
     protected function configure() {
         $this->setName('gp:skeleton:module');
         $this->setDescription("Create a module skeleton for metadata v2.1 for oxid 6.");
+        $this->addOption('template', 'e', InputOption::VALUE_REQUIRED, "Template to use, one of [twig, smarty, both]", $this->template);
         $this->addOption('path', 'p', InputOption::VALUE_REQUIRED, "Module installation path", $this->path);
         $this->addOption('vendor', 'o', InputOption::VALUE_REQUIRED, "Composer vendor/name", $this->vendor);
         $this->addOption('autoload', 'a', InputOption::VALUE_REQUIRED, "Composer psr-4 autoload namespace (use double backslash)", $this->autoload);
@@ -40,6 +43,7 @@ class Module extends Base {
     }
 
     protected function initOptions(): void {
+        $this->template = $this->question([$this, 'getOptionTemplate'], "Choose which template you want");
         $this->path = $this->getRealPath($this->question('path', "Enter installation path"));
         $this->vendor = $this->question('vendor', "Enter composer vendor");
         $this->autoload = $this->question('autoload', "Enter module namepacing");
@@ -52,6 +56,25 @@ class Module extends Base {
         $this->version = $this->question('versioning', "Enter composer & metadata version string");
         $this->readme = $this->ask(new ConfirmationQuestion('<comment>Create README.md [y] </comment>', $this->input->getOption('readme') && $this->input->getOption('no-interaction')));
         $this->changelog = $this->ask(new ConfirmationQuestion('<comment>Create CHANGELOG.md [y] </comment>', $this->input->getOption('changelog') && $this->input->getOption('no-interaction')));
+    }
+
+    public function getOptionTemplate(?string $given = null): string {
+        $template = strtolower(trim($given ?? $this->input->getOption('template')));
+        if (!$template) {
+            throw new InvalidOptionException("Option [template] must be given", 400);
+        }
+        if (!in_array($template, ['twig', 'smarty', 'both'], true)) {
+            throw new InvalidOptionException("Option [template] must be one of [twig, smarty, both]", 400);
+        }
+        return $template;
+    }
+
+    public function isTwig(): bool {
+        return in_array($this->template, ['twig', 'both'], true);
+    }
+
+    public function isSmarty(): bool {
+        return in_array($this->template, ['smarty', 'boty'], true);
     }
 
     protected function replaceData(string $source): string {
@@ -271,6 +294,7 @@ class Module extends Base {
         $this->setupReadme();
         $this->setupChangelog();
         $this->setupCopyFiles();
+        $this->output->writeln("Using template <info>{$this->template}</>");
         return static::SUCCESS;
     }
 }

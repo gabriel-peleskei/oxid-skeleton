@@ -3,7 +3,7 @@
     "description": "Create module/component skeletons for OXID eSales online shop",
     "type": "oxideshop-component",
     "license": "MIT",
-    "version": "6.0.0",
+    "version": "7.0.0",
     "autoload": {
         "psr-4": {
             "GP\\Oxid\\Skeleton\\": "src/"
@@ -15,7 +15,7 @@
         }
     ],
     "require": {
-        "oxid-esales/oxideshop-ce": "^6.2",
-        "php": ">=7.1"
+        "oxid-esales/oxideshop-ce": "^7.0",
+        "php": ">=8.0"
     }
 }

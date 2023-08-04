@@ -39,12 +39,18 @@ abstract class Base extends Command {
         }
     }
 
-    protected function ask(Question $question): mixed {
+    protected function ask(Question $question) {
         return $this->helper->ask($this->input, $this->output, $question);
     }
 
-    protected function question(string $option, string $question, string $example = ''): mixed {
-        $default = $this->input->getOption($option);
+    protected function question($option, string $question, string $example = '') {
+        if (is_callable($option)) {
+            $default = $option();
+        } else if (is_string($option)) {
+            $default = $this->input->getOption($option);
+        } else {
+            throw new \InvalidArgumentException("\$option must be a string or callable", 400);
+        }
         if ($example) {
             $example = "<info>$example</info> ";
         }
