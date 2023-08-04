@@ -10,14 +10,10 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\Question;
 
 abstract class Base extends Command {
-    /** @var int */
-    protected $shopId;
-    /** @var QuestionHelper */
-    protected $helper;
-    /** @var InputInterface */
-    protected $input;
-    /** @var OutputInterface */
-    protected $output;
+    protected ?int $shopId = null;
+    protected QuestionHelper $helper;
+    protected InputInterface $input;
+    protected OutputInterface $output;
 
     public function __construct() {
         parent::__construct();
@@ -39,17 +35,15 @@ abstract class Base extends Command {
         }
     }
 
-    protected function ask(Question $question) {
+    protected function ask(Question $question): mixed {
         return $this->helper->ask($this->input, $this->output, $question);
     }
 
-    protected function question($option, string $question, string $example = '') {
+    protected function question(callable|string $option, string $question, string $example = ''): mixed {
         if (is_callable($option)) {
             $default = $option();
-        } else if (is_string($option)) {
+        } else  {
             $default = $this->input->getOption($option);
-        } else {
-            throw new \InvalidArgumentException("\$option must be a string or callable", 400);
         }
         if ($example) {
             $example = "<info>$example</info> ";

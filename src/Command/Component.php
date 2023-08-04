@@ -9,15 +9,15 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\ConfirmationQuestion;
 
 class Component extends Base {
-    protected $vendor = 'please/change';
-    protected $path = './gp-skeleton-component';
-    protected $description = '';
-    protected $license = 'MIT';
-    protected $version = '1.0.0';
-    protected $autoload = 'That\\Should\\Be\\Changed';
-    protected $target = 'src/';
-    protected $authorName = '';
-    protected $authorMail = '';
+    protected string $vendor = 'please/change';
+    protected string $path = './gp-skeleton-component';
+    protected string $description = '';
+    protected string $license = 'MIT';
+    protected string $version = '1.0.0';
+    protected string $autoload = 'That\\Should\\Be\\Changed';
+    protected string $target = 'src/';
+    protected string $authorName = '';
+    protected string $authorMail = '';
 
 
     protected function configure() {
