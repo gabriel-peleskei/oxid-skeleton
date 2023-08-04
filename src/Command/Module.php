@@ -8,7 +8,7 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\ConfirmationQuestion;
 
-class ModuleV6 extends Base {
+class Module extends Base {
 
     protected $vendor = '<vendor>/<name>';
     protected $title = 'Module skeleton for oxid 6';
@@ -18,13 +18,13 @@ class ModuleV6 extends Base {
     protected $autoload = 'That\\Should\\Be\\Changed';
     protected $target = 'src/';
     protected $absTarget;
-    protected $path = "./gp-skeleton-v6";
+    protected $path = "./gp-skeleton-module";
     protected $id = 'gp_module_skeleton';
     protected $readme = false;
     protected $changelog = false;
 
     protected function configure() {
-        $this->setName('gp:skeleton:v6');
+        $this->setName('gp:skeleton:module');
         $this->setDescription("Create a module skeleton for metadata v2.1 for oxid 6.");
         $this->addOption('path', 'p', InputOption::VALUE_REQUIRED, "Module installation path", $this->path);
         $this->addOption('vendor', 'o', InputOption::VALUE_REQUIRED, "Composer vendor/name", $this->vendor);
@@ -52,25 +52,6 @@ class ModuleV6 extends Base {
         $this->version = $this->question('versioning', "Enter composer & metadata version string");
         $this->readme = $this->ask(new ConfirmationQuestion('<comment>Create README.md [y] </comment>', $this->input->getOption('readme') && $this->input->getOption('no-interaction')));
         $this->changelog = $this->ask(new ConfirmationQuestion('<comment>Create CHANGELOG.md [y] </comment>', $this->input->getOption('changelog') && $this->input->getOption('no-interaction')));
-    }
-
-    public function getOptionTemplate(?string $given = null): string {
-        $template = strtolower(trim($given ?? $this->input->getOption('template')));
-        if (!$template) {
-            throw new InvalidOptionException("Option [template] must be given", 400);
-        }
-        if (!in_array($template, ['twig', 'smarty', 'both'], true)) {
-            throw new InvalidOptionException("Option [template] must be one of [twig, smarty, both]", 400);
-        }
-        return $template;
-    }
-
-    public function isTwig(): bool {
-        return in_array($this->template, ['twig', 'both'], true);
-    }
-
-    public function isSmarty(): bool {
-        return in_array($this->template, ['smarty', 'boty'], true);
     }
 
     protected function replaceData(string $source): string {

@@ -6,8 +6,8 @@ services:
     autowire: true
     public: true
 
-  GP\Oxid\Skeleton\Command\ModuleV6:
+  GP\Oxid\Skeleton\Command\Module:
     tags:
-      - { name: console.command, command: 'gp:skeleton:v6' }
+      - { name: console.command, command: 'gp:skeleton:module' }
     autowire: true
     public: true
