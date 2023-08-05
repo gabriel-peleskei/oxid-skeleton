@@ -242,6 +242,20 @@ class Module extends Base {
         
     }
 
+    protected function setupMigration(): void {
+        $lines = [
+            "table_storage:",
+            "\ttable_name: oxmigrations_" . $this->id,
+            "migrations_paths:",
+            sprintf("\t'%s': data", $this->autoload . "\\Migrations"),
+        ];
+        $contents = implode("\n", $lines);
+        $target = $this->joinPath($this->path, 'migration', 'migrations.yml');
+        $this->writeTemplate($contents, $target);
+        $this->output->writeln("<info>Saved</info> <fg=gray>CHANGELOG.md</>");
+    }
+
+
     protected function confirmExecution(): ? int {
         $this->output->writeln('');
         $this->output->writeln("<comment>Root module directory is: <info>{$this->path}</info></comment>");
@@ -268,6 +282,7 @@ class Module extends Base {
         $this->setupCoreModule();
         $this->setupAdminTranslations();
         $this->setupTranslations();
+        $this->setupMigration();
         $this->setupReadme();
         $this->setupChangelog();
         $this->setupCopyFiles();
