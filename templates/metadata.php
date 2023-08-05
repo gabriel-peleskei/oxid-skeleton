@@ -16,7 +16,7 @@ $aModule = [
         'de'                  => '__DESCRIPTION__',
         'en'                  => '__DESCRIPTION__'
     ],
-    'thumbnail'               => 'out/logo.png',
+    'thumbnail'               => 'asets/logo.png',
     'version'                 => $sVersion,
     'author'                  => '',
     'url'                     => '',

@@ -98,16 +98,24 @@ class Module extends Base {
             $this->joinPath($root, 'Application', 'translations'),
             $this->joinPath($root, 'Core'),
             $this->joinPath($root, 'Service'),
-            $this->joinPath($root, 'Smarty', 'Plugin'),
-            $this->joinPath($path, 'views', 'blocks'),
-            $this->joinPath($path, 'views', 'admin', 'en'),
-            $this->joinPath($path, 'views', 'admin', 'de'),
-            $this->joinPath($path, 'views', 'tpl', 'admin'),
             $this->joinPath($path, 'migration', 'data'),
-            $this->joinPath($path, 'out', 'js'),
-            $this->joinPath($path, 'out', 'css'),
-            $this->joinPath($path, 'out', 'img'),
+            $this->joinPath($path, 'assets', 'js'),
+            $this->joinPath($path, 'assets', 'css'),
+            $this->joinPath($path, 'assets', 'img'),
         ];
+        if ($this->isSmarty()) {
+            $dirs[] = $this->joinPath($root, 'Smarty', 'Plugin');
+            $dirs[] = $this->joinPath($root, 'views', 'admin_smarty', 'en');
+            $dirs[] = $this->joinPath($root, 'views', 'admin_smarty', 'de');
+            $dirs[] = $this->joinPath($path, 'views', 'smarty', 'blocks');
+            $dirs[] = $this->joinPath($path, 'views', 'smarty', 'admin');
+            $dirs[] = $this->joinPath($path, 'views', 'smarty', 'tpl');
+        }
+        if ($this->isTwig()) {
+            $dirs[] = $this->joinPath($path, 'views', 'admin_twig', 'en');
+            $dirs[] = $this->joinPath($path, 'views', 'admin_twig', 'de');
+            $dirs[] = $this->joinPath($path, 'views', 'twig', 'admin');
+        }
         $this->output->writeln("Setting up folders...");
         foreach ($dirs as $dir) {
             if (mkdir($dir, 0777, true)) {
@@ -164,7 +172,18 @@ class Module extends Base {
     }
 
     protected function setupAdminTranslations(): void {
-        $baseDir = $this->joinPath($this->path, 'views', 'admin');
+        if ($this->isTwig()) {
+            $path = $this->joinPath($this->path, 'views', 'admin_twig');
+            $this->setupAdminHelper('twig', $path);
+        }
+        if ($this->isSmarty()) {
+            $path = $this->joinPath($this->path, 'views', 'admin_smarty');
+            $this->setupAdminHelper('smarty', $path);
+        }
+
+    }
+
+    protected function setupAdminHelper(string $for, string $baseDir): void {
         $langs = [
             'de' => 'Deutsch',
             'en' => 'Englisch'
@@ -178,7 +197,7 @@ class Module extends Base {
             $path = $this->joinPath($dirname, "{$this->id}_admin_{$abbr}_lang.php");
             $file = preg_replace('/__LANGNAME__/', $name, $template);
             $this->writeTemplate($file, $path);
-            $this->output->writeln("<info>Saved admin language</info> <comment>$name</comment> <fg=gray>$path</>");
+            $this->output->writeln("<info>Saved admin language ($for)</info> <comment>$name</comment> <fg=gray>$path</>");
         }
     }
 
@@ -255,7 +274,7 @@ class Module extends Base {
 
     protected function setupCopyFiles(): void {
         $files = [
-            [['logo.png'], $this->joinPath($this->path, 'out', 'logo.png')]
+            [['logo.png'], $this->joinPath($this->path, 'assets', 'logo.png')]
         ];
         foreach ($files as [$from, $to]) {
             $this->copyTemplate($to, ...$from);
@@ -263,6 +282,19 @@ class Module extends Base {
             $this->output->writeln("<info>Copied</info> <fg=gray>$fromString</fg=gray> to <fg=gray>$to</fg=gray>");
         }
         
+    }
+
+    protected function setupMigration(): void {
+        $lines = [
+            "table_storage:",
+            "\ttable_name: oxmigrations_" . $this->id,
+            "migrations_paths:",
+            sprintf("\t'%s': data", $this->autoload . "\\Migrations"),
+        ];
+        $contents = implode("\n", $lines);
+        $target = $this->joinPath($this->path, 'migration', 'migrations.yml');
+        $this->writeTemplate($contents, $target);
+        $this->output->writeln("<info>Saved</info> <fg=gray>CHANGELOG.md</>");
     }
 
     protected function confirmExecution(): ? int {
@@ -291,6 +323,7 @@ class Module extends Base {
         $this->setupCoreModule();
         $this->setupAdminTranslations();
         $this->setupTranslations();
+        $this->setupMigration();
         $this->setupReadme();
         $this->setupChangelog();
         $this->setupCopyFiles();
