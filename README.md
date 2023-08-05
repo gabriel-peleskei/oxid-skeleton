@@ -2,7 +2,6 @@
 
 Create OXID eShop module or component skeletons.  
 
-_Module skeleton v7 coming soon..._
 
 
 ## Installation
@@ -26,15 +25,13 @@ vendor/bin/oe-console gp:skeleton:component -n
 
 ## Module
 
-### V6 for OXID 6.2+
-
-Helper to create skeleton for smarty template
+Helper to create module skeleton 
 
 ```bash
-vendor/bin/oe-console gp:skeletion:v6 -h
+vendor/bin/oe-console gp:skeletion:module -h
 ```
 
-#### Structure
+### Structure
 
     - migration/
         - data/
@@ -68,7 +65,7 @@ vendor/bin/oe-console gp:skeletion:v6 -h
     - metadata.json
     - README.md
 
-#### Notice
+### Notice
 
 If you choose non-interactive mode you do not get to confirm your entered data.  
 You are responsible for the path u choose.
