@@ -35,6 +35,7 @@ vendor/bin/oe-console gp:skeletion:module -h
 
     - migration/
         - data/
+            - migrations.yml
     - out/
         - css/
         - img/
@@ -63,6 +64,7 @@ vendor/bin/oe-console gp:skeletion:module -h
             - admin/
     - composer.json
     - metadata.json
+    - CHANGELOG.md
     - README.md
 
 ### Notice
