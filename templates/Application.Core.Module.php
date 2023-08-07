@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace __ROOTNAMESPACE__\Application\Core;
+namespace __ROOTNAMESPACE__\Core;
 
 class Module
 {
