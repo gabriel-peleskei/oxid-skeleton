@@ -72,7 +72,7 @@ class Module extends Base {
     }
 
     public function isSmarty(): bool {
-        return in_array($this->template, ['smarty', 'boty'], true);
+        return in_array($this->template, ['smarty', 'both'], true);
     }
 
     protected function replaceData(string $source): string {
