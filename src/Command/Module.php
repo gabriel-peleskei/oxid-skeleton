@@ -13,7 +13,7 @@ class Module extends Base {
 
     protected string $template = 'twig';
     protected string $vendor = '<vendor>/<name>';
-    protected string $title = 'Module skeleton for oxid 6';
+    protected string $title = 'Module skeleton for oxid 7';
     protected string $description = '';
     protected string $license = 'MIT';
     protected string $version = '1.0.0';
@@ -32,7 +32,6 @@ class Module extends Base {
         $this->addOption('path', 'p', InputOption::VALUE_REQUIRED, "Module installation path", $this->path);
         $this->addOption('vendor', 'o', InputOption::VALUE_REQUIRED, "Composer vendor/name", $this->vendor);
         $this->addOption('autoload', 'a', InputOption::VALUE_REQUIRED, "Composer psr-4 autoload namespace (use double backslash)", $this->autoload);
-        $this->addOption('target', 'f', InputOption::VALUE_REQUIRED, "Composer namespace target directory", $this->target);
         $this->addOption('id', 'x', InputOption::VALUE_REQUIRED, "Module ID for composer", $this->id);
         $this->addOption('title', 't', InputOption::VALUE_REQUIRED, "Metadata title", $this->title);
         $this->addOption('description', 'd', InputOption::VALUE_OPTIONAL, "Composer & metadata description", $this->description);
@@ -43,15 +42,14 @@ class Module extends Base {
     }
 
     protected function initOptions(): void {
-        $this->template = $this->question([$this, 'getOptionTemplate'], "Choose which template you want");
+        $this->template = $this->question([$this, 'getOptionTemplate'], "Choose which template you want (twig, smarty, both)");
         $this->path = $this->getRealPath($this->question('path', "Enter installation path"));
         $this->vendor = $this->question('vendor', "Enter composer vendor");
         $this->autoload = $this->question('autoload', "Enter module namepacing");
-        $this->target = $this->question('target', "Enter namespace target directory");
         $this->absTarget = $this->joinPath($this->path, $this->target);
         $this->id = $this->question('id', "Enter module ID");
         $this->title = $this->question('title', "Enter metadata title");
-        $this->description = $this->question('description', "Enter composer & metdata description");
+        $this->description = $this->question('description', "Enter composer & metadata description");
         $this->license = $this->question('license', "Enter composer license");
         $this->version = $this->question('versioning', "Enter composer & metadata version string");
         $this->readme = $this->ask(new ConfirmationQuestion('<comment>Create README.md [y] </comment>', $this->input->getOption('readme') && $this->input->getOption('no-interaction')));

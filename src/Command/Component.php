@@ -29,7 +29,6 @@ class Component extends Base {
         $this->addOption('license', 'l', InputOption::VALUE_REQUIRED, 'Composer license', $this->license);
         $this->addOption('versioning', 'w', InputOption::VALUE_REQUIRED, 'Composer version', $this->version);
         $this->addOption('autoload', 'a', InputOption::VALUE_REQUIRED, 'Composer autoload psr-4 class (use double backslash)', $this->autoload);
-        $this->addOption('target', 't', InputOption::VALUE_REQUIRED, 'Autoload target directory', $this->target);
         $this->addOption('author-name', null, InputOption::VALUE_REQUIRED, 'Author\'s name', $this->authorName);
         $this->addOption('author-mail', null, InputOption::VALUE_REQUIRED, 'Author\'s email', $this->authorMail);
         $this->addOption('override', null, InputOption::VALUE_NONE, 'Overwrite contents `path` exists; in combination with [-n]');
@@ -158,7 +157,6 @@ class Component extends Base {
         $this->license = $this->question('license', 'Enter license name like', 'Apache');
         $this->version = $this->question('versioning', 'Enter desired version like', 'v6.6.6');
         $this->autoload = $this->question('autoload', 'Define Autoload namespace in psr-4 like', 'Company\\Oxid\\AwesomeComponent');
-        $this->target = $this->question('target', 'Target of your autoload class like', 'source/');
         $this->authorName = $this->question('author-name', 'Your name like', 'Mike Smith');
         $this->authorMail = $this->question('author-mail', 'Your email like', 'awesome@person.com');
         $output->writeln(["<info>... processing data ...</>"]);
