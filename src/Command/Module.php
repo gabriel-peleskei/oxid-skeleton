@@ -29,7 +29,6 @@ class Module extends Base {
         $this->addOption('path', 'p', InputOption::VALUE_REQUIRED, "Module installation path", $this->path);
         $this->addOption('vendor', 'o', InputOption::VALUE_REQUIRED, "Composer vendor/name", $this->vendor);
         $this->addOption('autoload', 'a', InputOption::VALUE_REQUIRED, "Composer psr-4 autoload namespace (use double backslash)", $this->autoload);
-        $this->addOption('target', 'f', InputOption::VALUE_REQUIRED, "Composer namespace target directory", $this->target);
         $this->addOption('id', 'x', InputOption::VALUE_REQUIRED, "Module ID for composer", $this->id);
         $this->addOption('title', 't', InputOption::VALUE_REQUIRED, "Metadata title", $this->title);
         $this->addOption('description', 'd', InputOption::VALUE_OPTIONAL, "Composer & metadata description", $this->description);
@@ -43,7 +42,6 @@ class Module extends Base {
         $this->path = $this->getRealPath($this->question('path', "Enter installation path"));
         $this->vendor = $this->question('vendor', "Enter composer vendor");
         $this->autoload = $this->question('autoload', "Enter module namepacing");
-        $this->target = $this->question('target', "Enter namespace target directory");
         $this->absTarget = $this->joinPath($this->path, $this->target);
         $this->id = $this->question('id', "Enter module ID");
         $this->title = $this->question('title', "Enter metadata title");
