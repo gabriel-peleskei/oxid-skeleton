@@ -111,7 +111,7 @@ class Module extends Base {
             'version' => $this->version,
             'autoload' => [
                 'psr-4' => [
-                    $this->autoload => $this->target
+                    $this->autoload . '\\' => $this->target
                 ]
             ],
             'require' => new \stdClass(),
@@ -250,7 +250,7 @@ class Module extends Base {
         $contents = implode("\n", $lines);
         $target = $this->joinPath($this->path, 'migration', 'migrations.yml');
         $this->writeTemplate($contents, $target);
-        $this->output->writeln("<info>Saved</info> <fg=gray>CHANGELOG.md</>");
+        $this->output->writeln("<info>Saved</info> <fg=gray>migrations.yml</>");
     }
 
 
